@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WegSaathi Foundation</title>
+<style>
+:root{--g:#133829;--gold:#D4AF37;--bg:#faf7f0;--t:#1b1b1b;--c:#fff}
+@media(prefers-color-scheme:dark){:root{--bg:#101a15;--t:#eee;--c:#18261f}}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--t)}
+header{background:var(--g);color:#fff;padding:14px 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+header h1{margin:0;font-size:20px;color:var(--gold)}nav button{background:none;border:0;color:#fff;cursor:pointer;padding:8px 10px;font-size:15px}
+nav button.on{border-bottom:2px solid var(--gold)}main{max-width:1000px;margin:auto;padding:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.card{background:var(--c);border-radius:10px;padding:14px;box-shadow:0 1px 4px #0002}.card img{width:100%;height:160px;object-fit:cover;border-radius:8px}
+.bar{background:#0002;border-radius:6px;height:8px}.bar i{display:block;height:100%;background:var(--gold);border-radius:6px}
+input,select,textarea{width:100%;padding:9px;margin:5px 0 10px;border:1px solid #8886;border-radius:6px;background:var(--c);color:var(--t);font:inherit}
+button.p{background:var(--g);color:#fff;border:0;padding:10px 18px;border-radius:6px;cursor:pointer;font-size:15px}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:6px;border-bottom:1px solid #8883;text-align:left}
+.tbl{overflow-x:auto}.hide{display:none}.msg{padding:10px;border-radius:6px;background:#d4af3733;margin:10px 0}
+footer{text-align:center;padding:20px;opacity:.7;font-size:13px}
+</style>
+</head>
+<body>
+<header><h1>WegSaathi Foundation</h1>
+<nav id="nav"></nav></header>
+<main id="app"></main>
+<footer>© WegSaathi Foundation · 80G &amp; 12A registered · <span id="sup"></span></footer>
+<script>
+const $=s=>document.querySelector(s);let D={},adminToken='',view='home';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr=n=>'₹'+Number(n).toLocaleString('en-IN');
+const tabs=[['home','Home'],['donate','Donate'],['wall','Supporters'],['about','Transparency & CSR'],['events','Blog & Events'],['contact','Contact'],['donor','Donor Portal'],['admin','Admin']];
+function nav(){$('#nav').innerHTML=tabs.map(t=>`<button class="${t[0]==view?'on':''}" onclick="go('${t[0]}')">${t[1]}</button>`).join('')}
+function go(v){view=v;nav();render()}
+async function api(url,body,headers={}){const r=await fetch(url,body?{method:'POST',headers:{'Content-Type':'application/json',...headers},body:JSON.stringify(body)}:{headers});return r.json()}
+function render(){const a=$('#app');({home,donate,wall,about,events,contact,donor,admin})[view](a)}
+function home(a){a.innerHTML=`<h2>Walking together to heal and empower</h2><p>Mental health, youth empowerment and community healthcare across India.</p><div class="grid">`+D.campaigns.map(c=>{const p=Math.min(100,Math.round(c.raised/c.goal*100));return`<div class="card"><img src="${esc(c.banner)}" alt="" loading="lazy"><h3>${esc(c.title)}</h3><p>${esc(c.description)}</p><div class="bar"><i style="width:${p}%"></i></div><small>${inr(c.raised)} of ${inr(c.goal)} (${p}%)</small><p><button class="p" onclick="go('donate');setTimeout(()=>$('#camp').value='${c.id}',0)">Donate</button></p></div>`}).join('')+`</div>`}
+function donate(a){const s=D.settings;a.innerHTML=`<div class="card"><h2>Make a Donation</h2><div id="out"></div>
+<label>Campaign<select id="camp">${D.campaigns.map(c=>`<option value="${c.id}">${esc(c.title)}</option>`).join('')}</select></label>
+<label>Amount (₹${s.minDonation} – ₹${s.maxDonation})<input id="amt" type="number" value="1000"></label>
+<label>Frequency<select id="freq"><option>One-time</option><option>Monthly</option></select></label>
+<label>Full name<input id="nm"></label><label>Email<input id="em" type="email"></label><label>Phone<input id="ph"></label>
+<label>PAN (for 80G receipt)<input id="pan" maxlength="10" style="text-transform:uppercase"></label>
+<label>Payment mode<select id="mode"><option>UPI</option><option>Card</option><option>Net Banking</option></select></label>
+<label>In honour / memory of (optional)<input id="tr"></label>
+<label><input type="checkbox" id="fee" style="width:auto"> Cover ${s.gatewayFeePercent}% gateway fee</label>
+<label><input type="checkbox" id="an" style="width:auto"> Donate anonymously</label>
+<button class="p" onclick="doDonate()">Donate</button><p><small>Demo mode: connect a payment gateway (Razorpay/Cashfree) before accepting real money.</small></p></div>`}
+async function doDonate(){const r=await api('/api/donate',{campaignId:$('#camp').value,amount:$('#amt').value,frequency:$('#freq').value,name:$('#nm').value,email:$('#em').value,phone:$('#ph').value,pan:$('#pan').value,mode:$('#mode').value,tribute:$('#tr').value,coverFee:$('#fee').checked,anonymous:$('#an').checked});
+$('#out').innerHTML=r.error?`<div class="msg">${esc(r.error)}</div>`:`<div class="msg">${esc(r.thankYouMessage)}<br><a href="/api/receipt/${esc(r.donation.id)}">Download 80G receipt</a>${r.digitalDeliverable?` · <a href="${esc(r.digitalDeliverable)}">Download guide</a>`:''}</div>`}
+function wall(a){a.innerHTML=`<h2>Supporter Wall</h2><div class="card tbl"><table><tr><th>Name</th><th>Amount</th><th>Cause</th><th>Tribute</th></tr>${D.supporterWall.map(s=>`<tr><td>${esc(s.name)}</td><td>${inr(s.amount)}</td><td>${esc(s.cause)}</td><td>${esc(s.tribute)}</td></tr>`).join('')}</table></div>`}
+function about(a){a.innerHTML=`<h2>Transparency</h2><div class="grid">${D.legalDocs.map(l=>`<div class="card"><b>${esc(l.title)}</b><br>${esc(l.regNo)}<br><small>${esc(l.year)}</small></div>`).join('')}</div><h2>CSR Partners</h2><div class="grid">${D.csrPartners.map(p=>`<div class="card"><b>${esc(p.name)}</b><br>${esc(p.tier)}<br><small>${esc(p.contribution)}</small></div>`).join('')}</div>`}
+function events(a){a.innerHTML=`<h2>Blog & Events</h2>${D.blogsAndEvents.map(p=>`<div class="card" style="margin-bottom:12px"><small>${esc(p.type)} · ${esc(p.date)}</small><h3>${esc(p.title)}</h3><p>${esc(p.summary)}</p></div>`).join('')}`}
+function contact(a){a.innerHTML=`<div class="card"><h2>Contact Us</h2><div id="out"></div><input id="n" placeholder="Name"><input id="e" type="email" placeholder="Email"><textarea id="m" rows="4" placeholder="Message"></textarea><button class="p" onclick="sendEnq()">Send</button></div>`}
+async function sendEnq(){const r=await api('/api/enquiry',{name:$('#n').value,email:$('#e').value,message:$('#m').value});$('#out').innerHTML=`<div class="msg">${esc(r.message||r.error)}</div>`}
+function donor(a){a.innerHTML=`<div class="card"><h2>Donor Portal</h2><input id="de" type="email" placeholder="Your email"><button class="p" onclick="donorLogin()">View my donations</button><div id="out" class="tbl"></div></div>`}
+async function donorLogin(){const em=$('#de').value;const r=await api('/api/donor/login',{email:em});if(r.error)return $('#out').innerHTML=`<div class="msg">${esc(r.error)}</div>`;
+$('#out').innerHTML=`<p><a href="/api/donor/annual-receipt/${encodeURIComponent(em)}">Annual 80G summary</a></p><table><tr><th>Date</th><th>Amount</th><th>Type</th><th>Status</th><th></th></tr>${r.donations.map(d=>`<tr><td>${new Date(d.date).toLocaleDateString('en-IN')}</td><td>${inr(d.amount)}</td><td>${esc(d.frequency)}</td><td>${esc(d.status)}</td><td><a href="/api/receipt/${esc(d.id)}">Receipt</a>${d.status=='Active'?` <a href="#" onclick="cancelSub('${esc(d.id)}','${esc(em)}');return false">Cancel</a>`:''}</td></tr>`).join('')}</table>`}
+async function cancelSub(id,email){await api('/api/donor/cancel-recurring',{id,email});donorLogin()}
+function admin(a){if(!adminToken){a.innerHTML=`<div class="card"><h2>Admin Login</h2><div id="out"></div><input id="pw" type="password" placeholder="Password"><button class="p" onclick="adminLogin()">Login</button></div>`;return}adminDash(a)}
+async function adminLogin(){const r=await api('/api/admin/login',{password:$('#pw').value});if(r.token){adminToken=r.token;render()}else $('#out').innerHTML=`<div class="msg">${esc(r.error)}</div>`}
+async function adminDash(a){const h={'x-admin-token':adminToken};const r=await api('/api/admin/dashboard',null,h);if(r.error){adminToken='';return render()}
+const tot=r.donations.reduce((s,d)=>s+d.amount,0);
+a.innerHTML=`<h2>Admin Dashboard</h2><div class="grid"><div class="card"><b>${inr(tot)}</b><br>Total raised</div><div class="card"><b>${r.donations.length}</b><br>Donations</div><div class="card"><b>${r.enquiries.length}</b><br>Enquiries</div></div>
+<p><button class="p" onclick="dl('/api/admin/export-csv','donors.csv')">Export CSV</button> <button class="p" onclick="dl('/api/admin/bulk-receipts','receipts.pdf')">Bulk receipts PDF</button></p>
+<div class="card"><h3>Add offline donation</h3><div id="out"></div><input id="on" placeholder="Name"><input id="oe" placeholder="Email"><input id="op" placeholder="PAN"><input id="oa" type="number" placeholder="Amount"><select id="om"><option>Cash</option><option>Cheque</option></select><input id="oc" placeholder="Cheque no."><button class="p" onclick="addOff()">Save</button></div>
+<h3>Recent donations</h3><div class="card tbl"><table><tr><th>ID</th><th>Name</th><th>Amount</th><th>Mode</th><th>Status</th></tr>${r.donations.slice(0,50).map(d=>`<tr><td>${esc(d.id)}</td><td>${esc(d.name)}</td><td>${inr(d.amount)}</td><td>${esc(d.mode)}</td><td>${esc(d.status)}</td></tr>`).join('')}</table></div>
+<h3>Enquiries</h3>${r.enquiries.map(e=>`<div class="card" style="margin-bottom:8px"><b>${esc(e.name)}</b> (${esc(e.email)})<br>${esc(e.message)}</div>`).join('')||'<p>None yet.</p>'}`}
+async function dl(url,name){const r=await fetch(url,{headers:{'x-admin-token':adminToken}});const b=await r.blob();const l=document.createElement('a');l.href=URL.createObjectURL(b);l.download=name;l.click()}
+async function addOff(){const r=await api('/api/admin/offline-donation',{name:$('#on').value,email:$('#oe').value,pan:$('#op').value,amount:$('#oa').value,mode:$('#om').value,chequeNo:$('#oc').value},{'x-admin-token':adminToken});if(r.success)render();else $('#out').innerHTML=`<div class="msg">${esc(r.error)}</div>`}
+(async()=>{D=await api('/api/init');$('#sup').textContent=D.settings.supportEmail;nav();render()})();
+</script>
+</body>
+</html>
