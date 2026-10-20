@@ -1,0 +1,143 @@
+{
+  "settings": {
+    "minDonation": 100,
+    "maxDonation": 100000,
+    "gatewayFeePercent": 2.36,
+    "ngoName": "WegSaathi Foundation",
+    "ngoPan": "AAACW1234F",
+    "ngo80GNumber": "AAACW1234FE20261",
+    "supportEmail": "support@wegsaathi.org",
+    "trackingPixelId": "G-WEGSAATHI2026"
+  },
+  "campaigns": [
+    {
+      "id": "camp-1",
+      "title": "Mental Health & Cultural Integration Camps",
+      "cause": "Mental Health & Well-being",
+      "goal": 500000,
+      "raised": 390000,
+      "banner": "https://images.unsplash.com/photo-1544027993-37dbfe43562a?auto=format&fit=crop&w=900&q=80",
+      "description": "Bridging traditional community healing wisdom with modern clinical mental health support across urban and rural India.",
+      "thankYouMessage": "Thank you for supporting Mental Health accessibility!",
+      "digitalFileUrl": "/guides/WegSaathi-Mental-Wellness-Handbook.pdf"
+    },
+    {
+      "id": "camp-2",
+      "title": "Rural Youth Education & Skill Academy",
+      "cause": "Youth Empowerment & Education",
+      "goal": 300000,
+      "raised": 185000,
+      "banner": "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80",
+      "description": "Empowering rural students with scholarships, resilience training, and vocational digital skills.",
+      "thankYouMessage": "Thank you for empowering the next generation of leaders!",
+      "digitalFileUrl": "/guides/WegSaathi-Youth-Impact-Report.pdf"
+    },
+    {
+      "id": "camp-3",
+      "title": "Community Healthcare & Emergency Relief",
+      "cause": "Rural Healthcare",
+      "goal": 750000,
+      "raised": 420000,
+      "banner": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=900&q=80",
+      "description": "Mobile medical vans, preventive health checkups, and nutritional support for vulnerable families.",
+      "thankYouMessage": "Your generosity saves lives every single day. Thank you!",
+      "digitalFileUrl": "/guides/WegSaathi-Health-Kit.pdf"
+    }
+  ],
+  "donations": [
+    {
+      "id": "TXN-WS-98102",
+      "receiptNo": "80G/2026-27/00101",
+      "name": "Priya Sharma",
+      "email": "priya@example.com",
+      "phone": "9876543210",
+      "pan": "ABCDE1234F",
+      "amount": 2000,
+      "feeCovered": 47,
+      "totalPaid": 2047,
+      "frequency": "Monthly",
+      "status": "Active",
+      "mode": "UPI",
+      "cause": "Mental Health & Well-being",
+      "campaignId": "camp-1",
+      "tribute": "In Memory of Ramesh Pal",
+      "anonymous": false,
+      "date": "2026-03-12T10:30:00.000Z"
+    },
+    {
+      "id": "TXN-WS-98105",
+      "receiptNo": "80G/2026-27/00102",
+      "name": "Rajesh Kulkarni",
+      "email": "rajesh@example.com",
+      "phone": "9822011223",
+      "pan": "FGHIJ5678K",
+      "amount": 5000,
+      "feeCovered": 0,
+      "totalPaid": 5000,
+      "frequency": "One-time",
+      "status": "Completed",
+      "mode": "Card",
+      "cause": "Youth Empowerment & Education",
+      "campaignId": "camp-2",
+      "tribute": "",
+      "anonymous": false,
+      "date": "2026-04-02T14:15:00.000Z"
+    }
+  ],
+  "blogsAndEvents": [
+    {
+      "id": "post-1",
+      "type": "Event",
+      "title": "Mental Health Awareness & Community Dialogue 2026",
+      "date": "2026-11-15",
+      "summary": "Join 500+ volunteers and psychologists as we bridge traditional support structures with clinical care."
+    },
+    {
+      "id": "post-2",
+      "type": "Blog",
+      "title": "How Grassroots Counseling Transforms Rural Families",
+      "date": "2026-10-01",
+      "summary": "Field findings from 40+ villages and urban community centers."
+    }
+  ],
+  "csrPartners": [
+    {
+      "name": "Tata Social Impact Initiative",
+      "tier": "Platinum CSR Partner",
+      "contribution": "Community Wellness Centers"
+    },
+    {
+      "name": "Infosys Care Foundation",
+      "tier": "Gold Digital Partner",
+      "contribution": "Youth Academy Infrastructure"
+    },
+    {
+      "name": "Mahindra Sustainability Fund",
+      "tier": "Silver Partner",
+      "contribution": "Mobile Rural Clinics"
+    }
+  ],
+  "legalDocs": [
+    {
+      "title": "80G Tax Exemption Certificate",
+      "regNo": "AAACW1234FE20261",
+      "year": "2026-27"
+    },
+    {
+      "title": "12A Registration Certificate",
+      "regNo": "AAACW1234FA20251",
+      "year": "Permanent"
+    },
+    {
+      "title": "CSR-1 Registration (MCA)",
+      "regNo": "CSR00049281",
+      "year": "2026"
+    },
+    {
+      "title": "NGO Darpan Unique ID",
+      "regNo": "RJ/2026/0491823",
+      "year": "Verified"
+    }
+  ],
+  "enquiries": []
+}
